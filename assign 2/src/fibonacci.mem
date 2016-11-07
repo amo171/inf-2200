@@ -1,0 +1,38 @@
+# Author: Erlend Graff <erlend.h.graff@uit.no>
+
+# Binary code for instruction and data memory
+# - Lines that begin with '#' are comments and should be ignored
+# - Remaining lines have the format: memory address<tab>binary code<tab>comment
+# - Hexadecimal numbers are used for addresses and binary code
+# - The content of non-specified words is assumed to be zero
+
+0xbfc00000	0x0bf00080	j 0xbfc00200 <begin>
+0xbfc00004	0x00000000	nop
+0xbfc00008	0x0000000d	break
+
+# <begin>
+0xbfc00200	0x24100040	addiu s0, zero, 40    # number of fibonacci numbers to generate
+0xbfc00204	0x3c11bfc0	lui s1, 0xbfc0        # base address
+0xbfc00208	0x26314000	addiu s1, s1, 0x4000  # base address
+0xbfc0020c	0x02204820	add t1, s1, zero      # address counter (store address)
+0xbfc00210	0x240a0001	addiu t2, zero, 1     # a = 1
+0xbfc00214	0x00005824	and t3, zero, zero    # b = 0
+0xbfc00218	0x00004024	and t0, zero, zero    # counter
+
+# <loop>
+0xbfc0021c	0x11100038	beq t0, s0, <end>     # if counter reaches dest, branch to <end>
+0xbfc00220	0x014b6020	add t4, t2, t3        # tmp = a + b
+0xbfc00224	0x01405820	add t3, t2, zero      # b = a
+0xbfc00228	0x01805020	add t2, t4, zero      # a = tmp
+0xbfc0022c	0xad2b0000	sw t3, t1             # store b in address held by t1
+0xbfc00230	0x25080001	addiu t0, t0, 1       # increment counter
+0xbfc00234	0x25290004	addiu t1, t1, 4       # increment store address
+0xbfc00238	0x0bf00087	j <loop>              # increment store address
+0xbfc0023c	0x00000000	nop
+0xbfc00240	0x0000000d	break
+
+# <end>
+0xbfc00300	0x0000000d	break
+
+# data memory
+0xbfc04000	0x0000000d	break

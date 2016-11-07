@@ -1,0 +1,81 @@
+# Author: Erlend Graff <erlend.h.graff@uit.no>
+
+# Binary code for instruction and data memory
+# - Lines that begin with '#' are comments and should be ignored
+# - Remaining lines have the format: memory address<tab>binary code<tab>comment
+# - Hexadecimal numbers are used for addresses and binary code
+# - The content of non-specified words is assumed to be zero
+
+##############################################
+##           INSTRUCTION MEMORY             ##
+##############################################
+
+# s0 = 0xc0000000
+0xbfc00000	0x3c10c000	lui s0, 0xc000
+
+# s1 = 0xbffffffc
+0xbfc00004	0x2611fffc	addiu s1, s0, -4
+0xbfc00008	0x8e310000	lw s1, s1
+
+0xbfc0000c	0x0bf0003c	j <selection_sort>
+
+#0xbfc000f0 <selection_sort>
+0xbfc000f0	0x2408ffff	addiu t0, zero, -1
+0xbfc000f4	0x260bfffc	addiu t3, s0, -4
+
+#0xbfc000f8 <loop1>
+0xbfc000f8	0x25080001	addiu t0, t0, 1
+0xbfc000fc	0x256b0004	addiu t3, t3, 4
+0xbfc00100	0x11113bbf	beq t0, s1 <after_loop>
+0xbfc00104	0x01605020	add t2, t3, zero
+0xbfc00108	0x8d6d0000	lw t3, t5
+0xbfc0010c	0x25090001	addiu t1, t0, 1
+0xbfc00110	0x256c0004	addiu t4, t3, 4
+
+#0xbfc00114 <loop2>
+0xbfc00114	0x1131000e	beq t1, s1, <loop1_end>
+0xbfc00118	0x8d8e0000	lw t4, t6
+0xbfc0011c	0x8d4f0000	lw t2, t7
+0xbfc00120	0x01cfc02a	slt t8, t6, t7
+0xbfc00124	0x13000001	beq t8, zero, <loop2_end>
+0xbfc00128	0x01805020	add t2, t4, zero
+
+#0xbfc0012c <loop2_end>
+0xbfc0012c	0x25290001	addiu t1, t1, 1
+0xbfc00130	0x258c0004	addiu t4, t4, 4
+0xbfc00134	0x0bf00045	jump <loop2>
+
+#0xbfc00150 <loop1_end>
+0xbfc00150	0x114bffe9	beq t2, t3, <loop1>
+0xbfc00154	0x8d4f0000	lw t2, t7
+0xbfc00158	0xad4d0000	sw t2, t5
+0xbfc0015c	0xad6f0000	sw t3, t7
+0xbfc00160	0x0bf0003e	jump <loop1>
+
+#0xbfc0f000 <after_loop>
+0xbfc0f000	0x0000000d	break
+
+
+##############################################
+##               DATA MEMORY                ##
+##############################################
+
+0xbffffff8	0x0000000d	break
+
+0xbffffffc	0x0000000d	<= number of elements in array here
+
+# Array of elements to be sorted (starting on address 0xc0000000):
+
+0xc0000000	0x0000000d
+0xc0000004	0x00000001
+0xc0000008	0x00000007
+0xc000000c	0x00000006
+0xc0000010	0x00000004
+0xc0000014	0x00000040
+0xc0000018	0x00000000
+0xc000001c	0x00000002
+0xc0000020	0x00000003
+0xc0000024	0x0000000a
+0xc0000028	0xffffffff
+0xc000002c	0x80000000
+0xc0000030	0x7fffffff

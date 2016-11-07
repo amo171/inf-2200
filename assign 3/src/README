@@ -1,0 +1,16 @@
+
+******************************
+*        HOW TO RUN          *
+******************************
+
+enter "cpu.c" file to edit variables at line 128+
+
+use makefile to generate cachesim
+
+if tracefiles are corrupted rename any of the logfiles to "logfile" and use traceconverter.py to generate a new tracefile
+
+in terminal
+:$ ./cachesim <trace file of choice>
+
+if data is preferred in a file use 
+:$ ./cachesim <tracefile of choice> | tee output.txt

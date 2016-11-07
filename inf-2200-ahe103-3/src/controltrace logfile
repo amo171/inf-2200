@@ -1,0 +1,33 @@
+==4992== Lackey, an example Valgrind tool
+==4992== Copyright (C) 2002-2015, and GNU GPL'd, by Nicholas Nethercote.
+==4992== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==4992== Command: ./program
+==4992== Parent PID: 3879
+==4992== 
+== Testing setup:
+== L1 cachesize = 32
+== L2 cachesize = 256
+== L1 instr ass = 4
+== L1 data ass = 4
+== L2 unif ass = 8
+== L1 block size = 64
+== L2 block size = 64
+== Store A
+S  888815C0,2
+== Store B
+S  888835C0,2
+== Store C
+S  888875C0,2
+== Store D
+S  8888F5C0,2
+== Load A
+L  888815C0,2
+== Load B
+L  888835C0,2
+== Store E
+S  8889F5C0,2
+== Load C
+L  888875C0,2
+== Should result in the following:
+== L1, 2 hits, 6 Misses
+== L2, 1 hits, 5 misses
